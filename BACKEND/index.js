@@ -30,11 +30,16 @@ const accounts = [
 app.post('/login', upload.none(), (req, res) => {
     const { username, password} = req.body;
     try {
-        const account = accounts.find(account => account.username === username && account.password === password);
+        const account = accounts.find(account => account.username === username);
         if(account) {
-            res.json({'message': 'Login Success'});
+            const passwordMatch = account.password === password;
+            if(passwordMatch) {
+                res.send({'message': 'Login Successful'});
+            } else {
+                res.send({'message': 'Invalid Password'});
+            }
         } else {
-            res.send({'message': 'Login Failed'});
+            res.send({'message': 'Account not registered'});
         }
     } catch (error) {
         console.log(error)
